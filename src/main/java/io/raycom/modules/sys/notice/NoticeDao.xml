@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.raycom.modules.sys.notice.NoticeDao">
+	
+	<!-- 获取所有菜单项 -->
+	<select id="getAllList" resultType="rdata" parameterType="page">
+		SELECT 	row_number()over(ORDER BY n.end_date desc)	"num",
+				n.notice_id							 		"noticeId",
+				n.notice_title								"noticeTitle",
+				to_char(n.start_date,'yyyy-mm-dd')			"startDate",
+				to_char(n.end_date,'yyyy-mm-dd')			"endDate"
+		 FROM	tb_ups_notice n,com_user u ,TB_UPS_VENDOR_HOSPITAL_APPLY uv
+		 WHERE  n.del_flag = 'N'
+		 and	u.del_flag = 'N'
+		 and	uv.del_flag = 'N' 
+		 and	u.user_id = #{param.currentUser}
+		 and	u.org_id = uv.vendor_id
+		 and	uv.org_id = n.org_id(+)
+      	<if test="param.noticeTitle != null and param.noticeTitle != ''">
+		 AND 	n.notice_title like  '%' || trim(#{param.noticeTitle}) || '%'
+		</if>
+     	<if test="param.startDate1 != null and param.startDate1 != ''">
+		 AND 	n.start_date > to_date(#{param.startDate1},'yyyy-mm-dd') 
+		</if>
+     	<if test="param.endDate1 != null and param.endDate1 != ''">
+		 AND 	to_date(#{param.endDate1},'yyyy-mm-dd') > n.start_date
+		</if> 
+	 	<if test="param.startDate2 != null and param.startDate2 != ''">
+		 AND 	n.end_date > to_date(#{param.startDate2},'yyyy-mm-dd') 
+		</if>
+     	<if test="param.endDate2 != null and param.endDate2 != ''">
+		 AND 	to_date(#{param.endDate2},'yyyy-mm-dd')+1 > n.end_date
+		</if>
+		union
+		SELECT 	row_number()over(ORDER BY n.end_date desc)	"num",
+				n.notice_id							 		"noticeId",
+				n.notice_title								"noticeTitle",
+				to_char(n.start_date,'yyyy-mm-dd')			"startDate",
+				to_char(n.end_date,'yyyy-mm-dd')			"endDate"
+		 FROM	tb_ups_notice n
+		 WHERE  n.del_flag = 'N'
+		 and	n.org_id is null
+      	<if test="param.noticeTitle != null and param.noticeTitle != ''">
+		 AND 	n.notice_title like  '%' || trim(#{param.noticeTitle}) || '%'
+		</if>
+     	<if test="param.startDate1 != null and param.startDate1 != ''">
+		 AND 	n.start_date > to_date(#{param.startDate1},'yyyy-mm-dd') 
+		</if>
+     	<if test="param.endDate1 != null and param.endDate1 != ''">
+		 AND 	to_date(#{param.endDate1},'yyyy-mm-dd') > n.start_date
+		</if> 
+	 	<if test="param.startDate2 != null and param.startDate2 != ''">
+		 AND 	n.end_date > to_date(#{param.startDate2},'yyyy-mm-dd') 
+		</if>
+     	<if test="param.endDate2 != null and param.endDate2 != ''">
+		 AND 	to_date(#{param.endDate2},'yyyy-mm-dd')+1 > n.end_date
+		</if> 
+	</select>	
+	
+	<!-- 根基菜单ID获取菜单项 -->
+	<select id="getNotice" parameterType="rdata" resultType="rdata">
+		SELECT	notice_id													"noticeId",
+				notice_title												"noticeTitle",
+				notice_content												"noticeContent",
+				to_char(start_date,'yyyy-mm-dd')							"startDate",
+				to_char(end_date,'yyyy-mm-dd')								"endDate",
+				decode(notice_Type,'01','公告','02','QA','03','特色')			"noticeType",
+				F_GET_COM_DICT_NAME(notice_Classify, 'noticeClassify')		"noticeClassify",
+				notice_picture												"noticePicture"
+		 FROM	tb_ups_notice tun
+		WHERE   tun.notice_id = #{noticeId}
+		and		tun.del_flag = 'N'
+	</select>
+	
+</mapper>

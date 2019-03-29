@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.raycom.modules.sys.register.RegisterDao">
+	<!-- 查看授权码状态 -->
+	<select id="getAuthorizationCodeStatus" parameterType="rdata" resultType="String">
+		SELECT 	is_use "isUse" ,org_id "orgId"
+		FROM 	tb_ups_authorization 
+		WHERE 	authorization_code   = trim(#{authorizationCode}) 
+		AND	    vendor_name          = trim(#{vendorName})
+		AND     del_flag		     = 'N'
+	</select>
+	
+	<!-- 查看供应商是否注册过 -->
+	<select id="isVendorRegistered" parameterType="rdata" resultType="int">
+		SELECT count(1)
+		FROM   tb_ups_vendor_apply
+		WHERE  vendor_ch_name = trim(#{vendorName})
+		AND    del_flag		      = 'N'
+	</select>
+	
+	<!-- 查看用户名是否重复 -->
+	<select id="isLoginNameRegistered" parameterType="rdata" resultType="String">
+		SELECT 1 
+		  FROM com_user a 
+		 WHERE a.login_name = #{loginName}
+		   AND del_flag		= 'N'
+	</select>
+	
+	<!-- 生成供应商id -->
+   <select id="getVendorId" resultType="String">
+   		SELECT seq_ups_vendor.nextval   as "vendorId" from dual
+   </select>
+
+	<!-- 插入用户表 -->
+	<insert id="createUserDo" parameterType="rdata">
+		<selectKey resultType="long" keyProperty="userId" order="BEFORE">
+              SELECT seq_com_user.nextval  as "userId" from dual
+        </selectKey>
+		INSERT INTO com_user
+		  (user_id,
+		   login_name,
+		   password,
+		   user_name,
+		   email,
+		   phone_no,
+		   mobile_no,
+		   org_id,
+		   create_by,
+		   create_date,
+		   update_by,
+		   update_date)
+		VALUES
+		  (#{userId},
+		   #{loginName},
+		   #{password},
+		   #{userName},
+		   #{email},
+		   #{phoneNo},
+		   #{mobileNo},
+		   #{vendorId},
+		   #{userId},
+		   sysdate,
+		   #{userId},
+		   sysdate)
+	</insert>
+	
+	<!-- 为供应商注册用户赋予“供应商临时用户”权限 -->
+	<insert id="grantPrivilegetoUser" parameterType="rdata">
+		INSERT INTO com_role_user
+		  (role_id,
+		   user_id,
+		   create_by,
+		   create_date,
+		   update_by,
+		   update_date)
+		VALUES
+		  (#{roleId},
+		   #{userId},
+		   #{userId},
+		   sysdate,
+		   #{userId},
+		   sysdate)
+	</insert>
+	
+	<!-- 将注册信息插入供应商注册表 -->
+	<insert id="createRegisterDo" parameterType="rdata">
+		INSERT INTO tb_ups_register
+		  (register_id,
+		   vendor_id,
+		   user_id,
+		   authorization_id,
+		   create_by,
+		   create_date,
+		   update_by,
+		   update_date)
+		VALUES
+		  (seq_ups_register.nextval,
+		   #{vendorId},
+		   #{userId},
+		   (select authorization_id from tb_ups_authorization where authorization_code = #{authorizationCode} AND vendor_Name = #{vendorName}),
+		   #{userId},
+		   sysdate,
+		   #{userId},
+		   sysdate)
+	</insert>
+	
+	<!-- 插入供应商基本信息审核表 -->
+	<insert id="createVendorApproveDo" parameterType="rdata">
+		INSERT INTO tb_ups_vendor_apply
+		  (vendor_id,
+		   vendor_code,
+		   vendor_ch_name,
+		   invoice_name,
+		   data_sources,
+		   del_flag,
+		   create_by,
+		   create_date，
+		   update_by,
+		   update_date,
+		   ext_approve_status,
+		   contact_name,
+		   contact_mobile,
+		   contact_email,
+		   company_type,
+		   area,
+		   registered_address,
+		   office_address,
+		   corporation,
+		   registered_Fund,
+		   tax_id,
+		   data_mode)
+		VALUES
+		  (#{vendorId},
+		   #{vendorId},
+		   #{vendorName},
+		   #{vendorName},
+		   #{dataSources},
+		   'N',
+		   #{userId},
+		   sysdate,
+		   #{userId},
+		   sysdate,
+		   #{extApproveStatus},
+		   #{userName},
+		   #{mobileNo},
+		   #{email},
+		   (select decode_code from tb_asc_data_decode where origin_name = #{companyType} and data_type = 'companyType'),
+		   (select decode_code from tb_asc_data_decode where origin_code = #{area} and data_type = 'state'),
+		   #{address},
+		   #{address},
+		   #{corporation},
+		   #{registeredFund},
+		   #{taxId},
+		   #{dataMode})
+	</insert>
+	
+	<!-- 更新授权码表 -->
+	<update id="updateAuthorizationDo" parameterType="rdata">
+		UPDATE tb_ups_authorization
+		SET    vendor_code        = #{vendorId},
+		       update_by          = #{userId},
+		       update_date        = sysdate,
+		       is_use             = 'Y',
+		       sync_time          = sysdate
+		WHERE  authorization_code = #{authorizationCode}
+		AND	   vendor_Name        = #{vendorName}
+	</update>
+	
+	<!-- 生成供应商医院授权关系 -->
+	<insert id="createVendorHospital" parameterType="rdata">
+		INSERT	INTO tb_ups_vendor_hospital_apply(
+			vendor_hospital_id,
+			status,
+			vendor_id,
+			org_id)
+	   VALUES(seq_ups_vendor_hospital_apply.nextval,
+			#{applyStatus},
+			#{vendorId},
+			#{orgId})
+	</insert>
+	
+</mapper>

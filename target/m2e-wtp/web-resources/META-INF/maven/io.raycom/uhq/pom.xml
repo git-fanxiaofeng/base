@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>  
+        <groupId>io.raycom</groupId>
+  		<artifactId>raycom-framework-pom</artifactId>
+  		<version>2.0.2_20181107</version> 
+        <relativePath>../raycom-framework-pom/pom.xml</relativePath>  
+    </parent> 
+	
+	<artifactId>uhq</artifactId>
+	<packaging>war</packaging>
+	<distributionManagement>
+        <repository>
+            <id>release</id>
+            <name>cdc-plugin-respository</name>
+            <url>http://139.196.191.0:8888/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+    
+    <dependencies>
+         <dependency>
+		    <groupId>com.thetransactioncompany</groupId>
+		    <artifactId>cors-filter</artifactId>
+		    <version>2.6</version>
+		</dependency>
+         <dependency>
+             <groupId>com.aliyun</groupId>
+             <artifactId>aliyun-java-sdk-core</artifactId>
+             <version>3.0.0</version>
+         </dependency>
+         <dependency>
+             <groupId>com.aliyun</groupId>
+             <artifactId>aliyun-java-sdk-dm</artifactId>
+             <version>3.1.0</version>
+         </dependency>
+    	
+     </dependencies>
+	<!-- 设定主仓库，按设定顺序进行查找。 -->
+	<repositories>
+		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.-->
+		<repository>
+			<id>raycom</id>
+			<name>Team Nexus Repository</name>
+			<url>http://139.196.191.0:8888/repository/maven-public/</url>
+		</repository> 
+		
+	</repositories>
+	<build>
+	<plugins>
+		<!-- tomcat7插件 -->
+			<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>${tomcat.version}</version> 
+					<configuration>
+						<!-- <port>${webserver.port}</port> -->
+						<!--  -->
+	    				<charset>${project.build.sourceEncoding}</charset>  
+	        			<!-- <server>tomcat7</server> -->
+						<url>${server.url}</url>
+						<username>${server.username}</username>
+	    				<password>${server.password}</password>
+						<!-- <url>${tomcat.url}</url>  -->
+						<path>${server.path}</path>
+					  	<warFile>${project.build.directory}/ups.war</warFile>  
+						<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+					</configuration>
+				</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		 <profile>
+            <id>publish</id>
+            <build>
+                <filters>                     
+                    <filter>src/main/resources/env/raycom_publish.properties</filter>
+                </filters>
+                <resources>    
+	                <resource>  
+		                <directory>src/main/java</directory>  
+		                <includes>  
+		                    <include>**/*.properties</include>  
+		                    <include>**/*.xml</include>  
+		                </includes>  
+		                <!-- 是否替换资源中的属性-->  
+		                <filtering>false</filtering>  
+		            </resource>                 
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources</directory>
+                         <includes>  
+		                   <!-- <include>**/*.properties</include>  
+		                   <include>**/*.xml</inclu<include>**/*</include> de> -->  
+		                   <include>**/*</include> 
+		               </includes> 
+		               <!-- <excludes>
+		               </excludes> -->
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+		 <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>               
+                <build.profile.id>dev</build.profile.id>
+                <server.url>http://115.159.83.82:90/manager/text</server.url>
+                <server.username>admin</server.username>
+                <server.password>password</server.password>
+                <server.path>/ups</server.path>
+            </properties>
+            <build>
+                <filters>                    
+                    <filter>src/main/resources/env/raycom_dev.properties</filter>
+                </filters>
+                <resources>    
+	                <resource>  
+		                <directory>src/main/java</directory>  
+		                <includes>  
+		                    <include>**/*.properties</include>  
+		                    <include>**/*.xml</include>  
+		                </includes>  
+		                <!-- 是否替换资源中的属性-->  
+		                <filtering>false</filtering>  
+		            </resource>                 
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources</directory>
+                         <includes>  
+		                   <include>**/*</include>  
+		               </includes> 
+		               <!-- <excludes>
+		               </excludes> -->
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>baidu</id>
+            <build>
+                <filters>                    
+                    <filter>src/main/resources/env/raycom_bd.properties</filter>
+                </filters>
+                <resources>    
+	                <resource>  
+		                <directory>src/main/java</directory>  
+		                <includes>  
+		                    <include>**/*.properties</include>  
+		                    <include>**/*.xml</include>  
+		                </includes>  
+		                <!-- 是否替换资源中的属性-->  
+		                <filtering>false</filtering>  
+		            </resource>                 
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources</directory>
+                         <includes>  
+		                   <include>**/*</include>   
+		               </includes> 
+		               <!-- <excludes>
+		               </excludes> -->
+                    </resource>
+                </resources>
+            </build>
+		</profile>
+	</profiles>
+</project>

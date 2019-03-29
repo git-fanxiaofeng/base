@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.raycom.modules.sys.organization.OrganizationDao">
+	<!-- 获取所有的组织结构 -->
+	<select id="organizationTree" resultType="rdata" parameterType="rdata" >
+		SELECT 		distinct parent_org_id  				"pId",
+            		(select org_name 
+            			from tb_ups_org 
+            			where org_id=t.parent_org_id)   	"parentName",
+            		org_id     								"id",
+            		org_name    							"name"
+          FROM    	tb_ups_org t
+         WHERE		del_flag='N'
+      ORDER BY 	    parent_org_id
+     
+	</select>
+	
+	<!-- 通过orgId查询组织详情 -->
+	<select id="queryByOrgId" resultType="rdata" parameterType="rdata">
+		SELECT		t.org_id								"orgId",
+       				t.org_name								"orgName",
+				    t.org_code								"orgCode",
+				    t.address								"address",
+			      	t.phone									"phone",
+			      	t.linkman								"linkman",
+			      	t.linkman_phone							"linkmanPhone",
+			      	t.parent_org_id							"parentOrgId",+	
+			      	t.hospital_org_id						"hospitalOrgId",
+			      	t.branch_org_id							"branchOrgId",
+			      	t.del_flag								"delFlag",
+			      	t.remarks								"remarks"
+		  FROM		tb_ups_org t
+		 WHERE		org_id=#{orgId}
+	</select>
+	
+	<!--　创建新组织   -->
+    <insert id="addOrganization" parameterType="rdata">
+        	INSERT INTO tb_ups_org (
+               			org_id,
+               			org_name, 
+               			org_code,
+               			address,
+               			phone,
+               			linkman,
+               			linkman_phone,
+               			parent_org_id,
+               			hospital_org_id,
+               			branch_org_id,
+               			create_by,
+               			create_date,
+               			update_by,
+               			update_date) 
+            VALUES (
+               			SEQ_UPS_ORG.nextval,
+               			trim(#{orgName}),
+               			trim(#{orgCode}),
+               			trim(#{address}),
+               			trim(#{phone}),
+               			trim(#{linkman}),
+               			trim(#{linkmanPhone}),
+               			trim(#{parentOrgId}),
+               			'1000',
+               			trim(#{branchOrgId}),
+               			#{currentUser},
+               			sysdate,
+               			#{currentUser},
+               			sysdate
+        			)
+    </insert>
+    
+   
+    <!-- 通过orgId更新组织信息 -->
+    <update id="updateOrganization" parameterType="rdata">
+    	UPDATE	tb_ups_org
+    	   SET	org_name			=trim(#{orgName}),
+    	   		org_code			=trim(#{orgCode}),
+       			address				=trim(#{address}),
+       			phone				=trim(#{phone}),
+       			linkman				=trim(#{linkman}),
+       			linkman_phone		=trim(#{linkmanPhone}),
+       			update_by			=#{currentUser},
+       			update_date			=sysdate
+       	 WHERE	org_id				=#{orgId}
+    </update>
+   
+    <!-- 通过orgId删除组织,这里只做逻辑删除，不做物理删除，即将del_flag状态改为Y -->
+    <update id="deleteOrganization" parameterType="rdata">
+    	UPDATE	tb_ups_org
+    	   SET	del_flag			='Y',
+       			update_by			=#{currentUser},
+       			update_date			=sysdate
+       	 WHERE	org_id				=#{orgId}
+    </update>
+    
+</mapper>

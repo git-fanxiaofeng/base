@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.raycom.modules.sys.chart.ChartDao">
+	
+	<!-- 查询订单未处理数量 -->
+	<select id="queryUnprocessed" resultType="String" parameterType="rdata">
+	  SELECT count(*)
+    	FROM tb_ups_po_mst t 
+    	WHERE t.status='02'
+    	AND	vendor_id = (select org_id from com_user where user_id = #{currentUser}) 
+		ORDER BY	po_master_id desc
+	</select>
+	
+	<!-- 查询资质有效期期限最短的前十 -->
+	<select id="queryCertValidForLine" parameterType="rdata" resultType="rdata">
+			SELECT t.* 
+			FROM(
+				select certificate_name 											"certificateName",
+				close_date-trunc(sysdate,'DD')    									DAYS,
+				row_number() over( order by (close_date-trunc(sysdate,'DD')) asc)  	NUM
+				from tb_ups_vendor_certificate
+				where  del_flag='N'
+		<if test="vendorId!='1000'">
+        	and vendor_id = #{vendorId}
+        </if>
+				) t
+			WHERE t.NUM &lt;=10
+	</select>
+	
+	<!-- 查询资质效期各区间数量 -->
+	<select id="queryCertValidForPie" parameterType="rdata" resultType="rdata">
+			SELECT  count(*) "NUM"
+       		FROM  tb_ups_vendor_certificate
+        	WHERE  (close_date - TRUNC(sysdate, 'DD'))&lt;=30
+        	and	  del_flag='N'
+        <if test="vendorId!='1000'">
+        	AND		vendor_id = #{vendorId}
+        </if>
+    		UNION ALL
+    		SELECT  count(*) "NUM"
+       		FROM  tb_ups_vendor_certificate
+        	WHERE  (close_date - TRUNC(sysdate, 'DD'))&lt;=90
+        	AND    (close_date - TRUNC(sysdate, 'DD'))&gt;30
+        	and	  del_flag='N'
+       	<if test="vendorId!='1000'">
+        	AND		vendor_id = #{vendorId}
+       	</if>
+        	UNION ALL
+    		SELECT  count(*) "NUM"
+        	FROM  tb_ups_vendor_certificate
+        	WHERE  (close_date - TRUNC(sysdate, 'DD'))&lt;=180
+        	AND    (close_date - TRUNC(sysdate, 'DD'))&gt;90
+        	and	  del_flag='N'
+       	<if test="vendorId!='1000'">
+        	AND		vendor_id = #{vendorId}
+        </if>
+    		UNION ALL
+    		SELECT  count(*) "NUM"
+        	FROM  tb_ups_vendor_certificate
+        	WHERE  (close_date - TRUNC(sysdate, 'DD'))&gt;180
+        	and	  del_flag='N'
+       	<if test="vendorId!='1000'">
+        	AND		vendor_id = #{vendorId}
+        </if>
+	</select>
+	
+		
+	<!-- 查询公告数量 -->
+	<select id="checkNoticeNumber"  parameterType="rdata" resultType="rdata">
+		SELECT     count(notice_id)       "noticeNum"		
+   		FROM   	   tb_ups_notice  
+   		where (del_flag='N'or del_flag is null)
+   		and   sysdate between start_date and (end_date+1)
+	</select>
+	
+	<!-- 查询公告标题 -->
+	<select id="noticeTitle" parameterType="rdata" resultType="rdata">
+		SELECT 	row_number()over(order by update_date desc)				"rowNumber",
+				notice_id												"noticeId",
+				notice_title  											"noticeTitle"											              							
+		FROM	tb_ups_notice
+		WHERE 	(del_flag='N' or del_flag is null)
+   		AND   	sysdate between start_date and (end_date+1)
+		and		4>=rownum
+	</select>
+	
+		<!-- 查询供应商的资质 -->
+	<select id="queryVendorCertificate" parameterType="rdata" resultType="rdata">
+		SELECT vc.certificate_id						"certificateId",
+			  F_GET_COM_DICT_NAME(vc.certificate_type, 'certificateType')	"certificateTypeName",
+			   vc.certificate_type						"certificateType",	
+			   vc.certificate_name						"certificateName",
+			   vc.certificate_code						"certificateCode",
+			   vc.org_id								"orgId",
+			   vc.vendor_id							"vendorId",
+			   vc.certificate_no						"certificateNo",
+			   to_char(vc.start_date,'YYYY-MM-DD')		"startDate",
+			   to_char(vc.close_date,'YYYY-MM-DD')		"closeDate",
+			   vc.issue_dept							"issueDept",
+			   vc.attach_id							"attachId",
+			   vc.remarks								"remarks",
+			   vc.manufacture_name						"manufactureName",
+			   <!-- vc.manufacture_code						"manufactureCode", -->
+			   vc.agency_order							"agencyOrder",
+			   vc.vendor_name							"vendorName",
+			   f.file_name_orig							"fileNameOrig",
+			   vc.del_flag								"delFlag",
+			   row_number() over(partition by vc.certificate_type,vc.manufacture_name order by vc.agency_order ASC)  row_number
+		FROM   tb_ups_vendor_cert_apply vc,
+			   com_file f
+		WHERE  vc.del_flag    = 'N'
+		AND	   vc.attach_id = f.file_id(+)
+		AND    vc.vendor_id = #{currentOrgId} 
+	</select>
+</mapper>
