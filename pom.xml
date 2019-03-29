@@ -10,7 +10,7 @@
         <relativePath>../raycom-framework-pom/pom.xml</relativePath>  
     </parent> 
 	
-	<artifactId>uhq</artifactId>
+	<artifactId>base</artifactId>
 	<packaging>war</packaging>
 	<distributionManagement>
         <repository>
