@@ -157,37 +157,6 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">发布系统</label>
-						<div class="col-sm-4">
-							<select id="publishSys" class="js-example-basic-single" name="publishSys" onchange="changeSys();" data-query="yes" data-placement="bottom"> 
-							    <option value="01" <c:if test="${notice.publishSys == '01'}">selected</c:if> >U-SC</option> 
-							    <option <c:if test="${notice.publishSys == '02'}">selected</c:if> value="02">U-PS</option> 
-							</select>
-						</div>
-						<label class="col-sm-1 control-label">显示顺序</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="showNo" name="showNo" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" placeholder="显示顺序" data-toggle="tooltip" data-placement="bottom" value="${notice.showNo}" >
-						</div>
-					</div>
-					<div class="form-group">
-						<div id="type" <c:if test="${notice.publishSys == '01'}">style="display:none"</c:if>>
-							<label class="col-sm-2 control-label">类型</label>
-							<div class="col-sm-4">
-								<select id="noticeType" class="js-example-basic-single" name="noticeType" onchange="changeType();" data-query="yes" data-placement="bottom">
-								    <option <c:if test="${notice.noticeType == '01'}">selected</c:if> value="01">公告</option> 
-								    <option <c:if test="${notice.noticeType == '02'}">selected</c:if> value="02">Q&A</option>
-								    <option <c:if test="${notice.noticeType == '03'}">selected</c:if> value="03">特色</option> 
-								</select>
-							</div>
-						</div>
-						<div id="classify" <c:if test="${notice.publishSys == '01' || (notice.publishSys == '02' && notice.noticeType != '01')}">style="display:none"</c:if>>
-							<label class="col-sm-1 control-label">公告分类</label>
-							<div class="col-sm-4">
-								<rt:select2 id="noticeClassify" name="noticeClassify" dataQuery="yes" comCode="noticeClassify" value="${notice.noticeClassify}"></rt:select2>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-2 control-label">公告内容</label>
 						<div class="col-sm-9">
 							<textarea id="noticeContent" name="noticeContent" cols="128.9" rows="8" >${notice.noticeContent}</textarea>

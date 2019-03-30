@@ -12,9 +12,11 @@
 				decode(tun.publish_sys,'02','U-PS','U-SC')											"publishSysName",
 				tun.publish_sys																		"publishSys",
 				to_char(tun.create_date,'yyyy-mm-dd hh24:mi:ss')												"createDate"
-		 FROM	tb_usc_notice tun
+		 FROM	com_notice tun
 		 WHERE  tun.del_flag = 'N' 
+		 <if test="param.orgId != null and param.orgId != ''">
 		 and ( tun.org_id = #{param.orgId} OR tun.org_id is null)
+		</if>
       	<if test="param.noticeTitle != null and param.noticeTitle != ''">
 		 AND 	tun.notice_title like  '%' || trim(#{param.noticeTitle}) || '%'
 		</if>
@@ -46,9 +48,8 @@
         		notice_classify							"noticeClassify",
         		F_GET_COM_DICT_NAME(notice_classify, 	'noticeClassify')	"noticeClassifyName",
         		notice_picture							"noticePicture",
-        		show_no									"showNo",
-        		ext_notice_id                           "extNoticeId"
-		 FROM	tb_usc_notice tun
+        		show_no									"showNo"
+		 FROM	com_notice tun
 		WHERE   tun.notice_id=#{noticeId}
 	</select>
 	
@@ -59,7 +60,7 @@
 	
 	<!-- 新增保存公告 -->
 	<insert id="createNoticeDo" parameterType="rdata">
-       	insert into tb_usc_notice (
+       	insert into com_notice (
         		notice_id,
         		notice_title, 
         		notice_content,
@@ -97,7 +98,7 @@
 	
 	<!-- 修改公告 -->
 	<update id="updateNoticeDo" parameterType="rdata">
-		UPDATE  tb_usc_notice
+		UPDATE  com_notice
 		   SET  notice_title	= trim(#{noticeTitle}), 
              	notice_content	= #{noticeContent,jdbcType=BLOB},
              	start_date		= to_date(trim(#{startDate}),'yyyy-mm-dd hh24:mi:ss'),
@@ -114,7 +115,7 @@
 	
 	<!-- 根据id删除 -->
 	<delete id="delete" parameterType="rdata">
-		UPDATE  tb_usc_notice 
+		UPDATE  com_notice 
 		SET  	del_flag		='Y',
 				update_date		= sysdate,
              	update_by		= #{currentUser} 

@@ -34,10 +34,10 @@ public class ChartController extends BaseController {
 	@RequestMapping(value={"list",""})
 	public String approveList(Model model){
 		System.out.println(rdata);
-		model.addAttribute("number",chartService.queryUnprocessed(rdata));
-		model.addAttribute("noticeNumber",chartService.checkNoticeNumber(rdata));
-		model.addAttribute("noticeTitle",chartService.noticeTitle(rdata));
-		model.addAttribute("certificateList", chartService.queryVendorCertificate(rdata));
+		//model.addAttribute("number",chartService.queryUnprocessed(rdata));
+		//model.addAttribute("noticeNumber",chartService.checkNoticeNumber(rdata));
+		//model.addAttribute("noticeTitle",chartService.noticeTitle(rdata));
+		//model.addAttribute("certificateList", chartService.queryVendorCertificate(rdata));
 		return "sys/chart/main";
 	}
 	

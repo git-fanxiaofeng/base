@@ -58,10 +58,6 @@
 						<div class="col-sm-2">
 							<input type="text" id="userName" class="form-control" placeholder="姓名" data-query="yes"  data-toggle="tooltip" data-placement="bottom" title="姓名">
 						</div>
-						<label class="col-sm-1 control-label">供应商名称</label>
-						<div class="col-sm-2" >
-							<input type="text" id="vendorChName" class="form-control" placeholder="供应商名称" data-query="yes"  data-toggle="tooltip" data-placement="bottom" title="供应商名称">							
-						</div>
 						<label class="col-sm-1 control-label">电子邮箱</label>
 						<div class="col-sm-2" >
 							<input type="text" id="email" class="form-control"  placeholder="电子邮箱" data-query="yes"  data-toggle="tooltip"
@@ -117,7 +113,6 @@
 							<th data-column="email">电子邮件</th>
 							<th data-column="mobileNo">电话号码</th>
 							<th data-column="mobileNo">手机</th>
-							<th data-column="vendorChName">供应商名称</th>	
 							<th data-column="loginFlag">登录状态</th>
 							<th data-column="op" data-method="[
 										{targets:-1,title:'查看',fncName:'fncUpdate',params:'userId'},

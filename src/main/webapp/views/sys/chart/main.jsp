@@ -12,13 +12,12 @@
 <div id="ajax-content">
 <div class="row">
 	<form id="form" method="post" action=""></form>
-	<div class="col-xs-12 col-sm-12" style="height: 20px;"></div>
+	<div class="col-xs-12 col-sm-12" style="height: 50px;"></div>
 	<div class="col-xs-12 col-sm-6">
 		<div class="box">
 			<%@include file="/core/include/boxHead.jsp" %>	
 			<div class="box-content" style="height: 323px;">
 				<div  class="ct-chart tab-pane fade in active" style="height: 250%; width: 100%;">
-					<font>订单未处理数量：<a href="javascript:void(0)" onclick="jumpPage();" class="tab-link" data-toggle="tab" >${number}</a></font><br>
       	 			<font>最新公告：</font><br>
       	 			<c:forEach items="${noticeTitle}" var ="title">
       	 				<font><a href="javascript:void(0)" onclick="fncNoticeDetail(${title.noticeId})" class="tab-link" data-toggle="tab" >${title.noticeTitle}</a></font><br>
@@ -37,62 +36,6 @@
 				</ul>	
 				<div id="container2" class="ct-chart tab-pane fade in active" style="height: 250%; width: 100%;"></div>
 			</div>
-		</div>
-	</div>
-	<div class="col-xs-12 col-sm-12">
-		<div class="box ui-draggable ui-droppable">
-			<div class="box-header">
-				 <div class="box-name ui-draggable-handle">
-					<span>资质信息</span>
-				</div>
-				<div class="box-icons pull-right">
-					<a class="collapse-link">
-						<i class="fa fa-chevron-up"></i>
-					</a>
-					<a class="expand-link">
-						<i class="fa fa-expand"></i>
-					</a>
-				</div>
-				<div class="no-move"></div>
-			</div>	
-			<div class="box-content">
-				<table class="table table-striped table-bordered " id="certificate" width="100%">
-				    		<tr>
-				    			<th>资质证类型</th>
-				    			<th>资质证名称</th>
-				    			<th>证书编号</th>
-				    			<th>生效日期</th>
-				    			<th>失效日期</th>
-				    			<th>备注</th>
-				    			<th>发证机关</th>
-				    			<th>附件</th>
-				    		</tr>
-				    	<c:forEach items="${certificateList}" var="certificate">
-			    			<tr class="tr" data-type='data' data-name="${certificate.certificateType}">
-			    				<td>${certificate.certificateTypeName}
-			    					<input type="hidden"  value="${certificate.certificateId}"/>
-			    				</td>
-			    				<td>${certificate.certificateName}
-			    					<input type="hidden" name="type" value="${certificate.certificateType}"/>
-			    				</td>
-			    				<td>${certificate.certificateNo}
-			    					<input type="hidden" name="certificateName" value="${certificate.certificateName}"/>
-			    				</td>
-			    				<td>${certificate.startDate}</td>
-			    				<td>${certificate.closeDate}</td>
-			    				<td>${certificate.remarks}</td>
-			    				<td>${certificate.issueDept}</td>
-			    				<td>
-			    					<a href="${fns:getConfig("cdn.url")}/file/download?fileId=${certificate.attachId}"
-													target=“_blank”>${certificate.fileNameOrig}
-									</a>
-			    				</td>
-			    			</tr>
-				    	</c:forEach>
-				    	</table>
-			</div>
-				<br>
-				<br>
 		</div>
 	</div>
 </div>

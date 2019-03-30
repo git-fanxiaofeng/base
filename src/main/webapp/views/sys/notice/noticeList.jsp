@@ -62,10 +62,10 @@
 	        var noticeId = data["noticeId"];
 	        var publishSys = data["publishSys"];
 	        if(publishSys != '03'){
-	        	$('td', row).eq(6).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>"+
+	        	$('td', row).eq(5).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>"+
 	        								"<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDelete('"+noticeId+"','"+publishSys+"')\" title='去删除'><i class='fa fa-trash-o'></i></a>");
 	        }else{
-	        	$('td', row).eq(6).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>");
+	        	$('td', row).eq(5).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>");
 	        }
 		}
 	});
@@ -153,7 +153,6 @@
 							<th data-column="noticeTitle">公告标题</th>
 							<th data-column="startDate">公告开始日期</th>
 							<th data-column="endDate">公告结束日期</th>
-							<th data-column="publishSysName">发布系统</th>
 							<th data-column="createDate">创建日期</th>
 							<th data-column="op">操作</th>
 						</tr>

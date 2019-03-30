@@ -10,29 +10,19 @@
 		       a.user_name  "userName",
 		       a.user_type  "userType",
 		       a.org_id     "orgId",
-		       (select d.org_name from tb_ups_hospital d where a.org_id = d.org_id)   "orgName",
 		       a.office_id  "officeId",
-		       (select b.org_name from  tb_ups_org b where a.office_id = b.org_id )  "officeName",
-		       CASE a.login_flag   when 'Y' then   '允许登录'    when 'N' then    '禁止登录'    end "loginFlag",       
 		       Lower(a.email)       "email",
 		       a.phone_no    "phoneNo",
 		       a.mobile_no   "mobileNo",
 		       a.password    "password",
-		       a.employee_id "employeeId",
-		       v.vendor_ch_name		"vendorChName"
-		FROM   com_user a,tb_ups_vendor_apply v
-		WHERE  a.del_flag = 'N' and	v.vendor_code = a.org_id
-		<if test="param.currentUser != '10000001'" >
-			 AND cu.user_id	!='10000001'
-		</if>
+		       a.employee_id "employeeId"
+		FROM   com_user a
+		WHERE  a.del_flag = 'N'
 	    <if test="param.loginName != null and param.loginName != ''">
 			 AND a.login_name	 like  '%' || trim(#{param.loginName}) || '%'
 		</if>
 	     <if test="param.userName != null and param.userName != ''">
 			 AND a.user_name  like  '%' ||	trim(#{param.userName})  || '%'
-		</if>
-		<if test="param.vendorChName != null and param.vendorChName != ''">
-			 AND v.vendor_ch_Name  like  '%' || trim(#{param.vendorChName})  || '%'
 		</if>
 		<if test="param.mobileNo != null and param.mobileNo != ''">
 			 AND a.mobile_No	  like  '%' || trim(#{param.mobileNo}) || '%'
@@ -50,16 +40,6 @@
 		</if>
 	</select>
 	
-	<!-- 获取所有部门 -->
-	<select id="getOfficeList" resultType="rdata">
-		SELECT org_id "id",
-		       parent_org_id "pId",
-		       org_name "name",
-		       (select org_name from tb_ups_org m where m.org_id = cm.parent_org_id) "parentName"
-		  FROM tb_ups_org cm
-		 WHERE del_flag = 'N'
-
-	</select>
 	
 	<!-- 查询所有角色 -->
 	<select id="getRoleList" resultType="rdata" >
@@ -101,9 +81,7 @@
 		       a.user_name   "userName",
 		       a.user_type   "userType",
 		       a.org_id      "orgId",
-		       (select h.org_name from tb_ups_hospital h where a.org_id = h.org_id)	 "orgName",
 		       a.office_id   "officeId",
-		       (select b.org_name from  tb_ups_org b where a.office_id = b.org_id)   "officeName",
 		       a.login_flag  "loginFlag",
 		       a.email       "email",
 		       a.phone_no    "phoneNo",

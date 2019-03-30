@@ -125,30 +125,10 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">员工编号</label>
-						<div class="col-sm-4">
-							<input type="text" id="employeeId" name="employeeId" class="form-control" value="${user.employeeId}">
-						</div>
-						<label class="col-sm-1 control-label">部门</label>
-						<div class="col-sm-4">
-							<input value="${user.officeId}" type="hidden" id="officeId" name="officeId" class="form-control" placeholder="" data-toggle="tooltip" data-placement="top">
-							<input value="${user.officeName}" type="text" id="officeName" name="officeName" class="form-control" placeholder="" data-toggle="tooltip" data-placement="top" >
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-2 control-label">状态</label>
 						<div class="col-sm-4" style="padding-top: 4px;">
 							<input name="loginFlag" type="radio" value="Y" />可以登陆
 							<input name="loginFlag" type="radio" value="N" />禁止登录
-						</div>
-						
-						<label class="col-sm-1 control-label">用户类型</label>
-						<div class="col-sm-4">
-							<select id="userType" name="userType" class="form-control">
-								<option value="">请选择</option>
-								<option value="1" >医师</option>
-								<option value="2" >学生</option>
-							</select>
 						</div>
 					</div>
 					<%-- <div class="form-group">
