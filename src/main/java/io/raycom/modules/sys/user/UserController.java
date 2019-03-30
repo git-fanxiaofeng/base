@@ -131,4 +131,32 @@ public class UserController extends BaseController{
 		rdata.set("password", password);
 		return userService.resetPwd(rdata);
 	}
+	
+	/**
+	 * 修改密码
+	 * @return
+	 */
+	@RequestMapping(value="updatePwd")
+	public String updatePwd(Model model){
+		model.addAttribute("user",userService.queryUserName(rdata));
+		return "sys/user/pwdUpdate";
+	}
+	
+	/**
+	 * 保存修改的密码
+	 * @return
+	 */
+	@RequestMapping(value="saveUpdatedPwd")
+	@ResponseBody
+	public String saveUpdatedPwd(){
+		if (SecurityService.validatePassword(rdata.getString("oldPassword"), userService.queryUserPwd(rdata))) {
+			//修改密码
+			rdata.setString("newPassword", SecurityService.entryptPassword(rdata.getString("newPassword")));
+			return userService.saveUpdatedPwd(rdata);
+		}else {
+			//原密码错误
+			return "oldPasswordError";
+		}
+	}
+	
 }

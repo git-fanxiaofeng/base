@@ -54,8 +54,8 @@
 				<sys:validateCode name="validateCode" inputCssStyle="margin-bottom:0;"/>
 			</div>
 			</c:if>
-			<!--
-			<div class="login_remember clearfloat">
+			
+			<!-- <div class="login_remember clearfloat">
 				<span class="d_left">
 					<div class="d_checkbox"><input name="rememberMe" id="rememberMe" class="c_input" value="" type="hidden"></div>
 					<a class="l_cb" href="javascript:void(0)" id="ULP_w_remember">记住密码</a> 
@@ -63,19 +63,19 @@
 				<span class="d_right"> 
 					<a href="javascript:;" class="resetPass" id="ULP_w_forgetpwd">忘记密码</a>
 				</span>
-			</div> 
-			-->
+			</div>  -->
+			
 			<div class="loginPanelBottomBtn">
 				<a  href = "javascript:;" onclick ="login();" class="userupbtn btnfx btn-8g" id="login_btn">登录</a> 
 				   <input type="submit" name="argsubmit" style="display:none"/>
 			</div> 
-			<div class="go_sign_up"> 请输入用户名和密码进行登陆<a href = "javascript:;" onclick ="register();" id="go-register">马上注册</a></div> 
+			<div class="go_sign_up"> 请输入用户名和密码进行登陆 
 			<div class="go_sign_up"> 推荐浏览器下载--<a id="go-register" href = "http://106.14.127.212/firefox.exe"  >火狐浏览器</a></div> 
 			</form>
 			</div> 
 			<div class="terms_privacy form-bottom"> 
 			<hr class="hr1"> 
-			<span class="user_other_login">创智融科(北京)科技有限责任公司 ©2018</span> 
+			<span class="user_other_login">范晓峰©2019</span> 
 			</div> 
 		</div>           
 		</div>  

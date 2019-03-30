@@ -17,6 +17,18 @@ public interface NoticeDao {
 
 	ArrayList<RData> getAllList(Page<RData> page);
 
+	void createNoticeDo(RData rdata);
+
 	RData getNotice(RData rdata);
+
+	void delete(RData rdata);
+
+	void updateNoticeDo(RData rdata);
+
+	String queryNoticeId(RData rdata);
+
+	RData queryNoticeById(RData rdata);
+
+	String queryNoticeId();
 
 }

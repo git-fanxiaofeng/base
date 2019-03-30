@@ -4,7 +4,7 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>创智融科供应商管理平台(U-PS)</title>
+  <title>基础系统(base)</title>
   <meta http-equiv=refresh content="0;url=${ctxtPath}/views/front/index.jsp">
 </head>
 <body>

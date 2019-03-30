@@ -95,4 +95,22 @@ public class UserService extends BaseService {
 		userdao.resetPwd(rdata);
 		return "ok";
 	}
+	
+	public RData queryUserName(RData rdata) {
+		return userdao.queryUserName(rdata);
+	}
+	
+	public String saveUpdatedPwd(RData rdata) {
+		//更新密码
+		this.savePwd(rdata);
+		return "ok";
+	}
+	
+	private void savePwd(RData rdata) {
+		userdao.savePwd(rdata);
+	}
+	
+	public String queryUserPwd(RData rdata) {
+		return userdao.queryUserPwd(rdata);
+	}
 }

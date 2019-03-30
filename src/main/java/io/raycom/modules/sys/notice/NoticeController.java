@@ -1,6 +1,10 @@
 package io.raycom.modules.sys.notice;
 
-import java.util.ArrayList;
+import io.raycom.web.support.mvc.controller.BaseController;
+import io.raycom.web.support.utils.user.UserUtils;
+import io.raycom.common.config.Global;
+import io.raycom.core.collection.RData;
+import io.raycom.web.bean.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,19 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import io.raycom.core.collection.RData;
-import io.raycom.web.bean.Page;
-import io.raycom.web.support.mvc.controller.BaseController;
-
 /**
  * 公告管理
- * @author liyuan
- * @date 2016-04-14
- * @version 1.0.0
+ * @author zhx，jwz
  */
 @Controller
-@RequestMapping(value = "${adminPath}/sys/notice")
+@RequestMapping(value = "${adminPath}/notice")
 public class NoticeController extends BaseController {
+	
 	
 	@Autowired
 	private NoticeService noticeService;
@@ -44,24 +43,51 @@ public class NoticeController extends BaseController {
 	}
 	
 	/**
-	 * 进入公告修改页面
+	 * 进入新增页面
 	 */
-	@RequestMapping(value ="update")
-	public String update(Model model) {
-		RData notice=noticeService.getNotice(rdata);
-		model.addAttribute("notice", notice);
-		return "sys/notice/noticeUpdate";
+	@RequestMapping(value = "add")
+	public String add() {
+		return "sys/notice/noticeAdd";
+	}
+	
+	/**
+	 * 公告新增保存
+	 */
+	@RequestMapping(value ="createNoticeDo")
+	@ResponseBody
+	public String createNoticeDo() {
+		String result = noticeService.createNotice(rdata);
+		return result;
+	}
+	
+	/**
+	 * 公告修改保存
+	 */
+	@RequestMapping(value ="updateNoticeDo")
+	@ResponseBody
+	public String updateNoticeDo() {
+		String result = noticeService.updateNotice(rdata);
+		return result;
 	}
 	
 	/**
 	 * 进入公告修改页面
+	 * @throws Exception 
 	 */
-	@RequestMapping(value ="detail")
-	public String detail(Model model) {
+	@RequestMapping(value ="update")
+	public String update(Model model) throws Exception {
 		RData notice=noticeService.getNotice(rdata);
 		model.addAttribute("notice", notice);
 		return "sys/notice/noticeDetail";
 	}
 	
+	/**
+	 * 删除
+	 */
+	@RequestMapping(value = "delete")
+	public String delete(Model model){
+		noticeService.deleteNotice(rdata);
+		return "sys/notice/noticeList";
+	}
 
 }

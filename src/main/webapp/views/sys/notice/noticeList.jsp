@@ -8,63 +8,67 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		table = $('#datatable-form').raytable('form');
-		$('#datatable-form').on( 'draw.dt', function () {
-			var arr = table.rows().data();
-			$('#datatable-form').attr("class","table  table-bordered  dataTable no-footer");
-			for(var i = 0; i <arr.length;i++){
-				var date = arr[i].endDate;//获取公告结束日期
-				var val = Date.parse(date)+1 * 24 * 60 * 60 * 1000;//转换为date
-				var date=new Date();//获取当前时间
-				var result=date.getTime();
-				var time = result-val;//获取时间差
-				if(time<=0){
-					$('#datatable-form').find('tr').eq(i+1).find('td').eq(2).attr("style","color :red; font-weight:600");
-				}
-			}
-			
-		} );
-		
+		table = $('#datatable-form').raytable('form',{rightColumns:-1});
+		table.column( 1 ).visible( false );
+		table.column( 2 ).visible( false );
 		setWinMoved();
-		//键盘回车事件
-		$(document).keyup(function(event){
-			if(event.keyCode == 13 ){
-				$("#btnSearch").click();
-			};	
-		});
 		$("#startDate1").rayDatePicker();
 		$("#startDate2").rayDatePicker();
 		$("#endDate1").rayDatePicker();
 		$("#endDate2").rayDatePicker();
-		//用来存放当前正在操作的日期文本框的引用。  
-		var datepicker_CurrentInput;     
-		// 设置DatePicker 的默认设置  
-		$.datepicker.setDefaults({ showButtonPanel: true,  isShowToday : false, currentText : 'Today',closeText: '清除', beforeShow: function (input, inst) { datepicker_CurrentInput = input; } });  
-		// 绑定“Done”按钮的click事件，触发的时候，清空文本框的值  
-		$("#ui-datepicker-div").on("click",".ui-datepicker-close", function ()  
-		{  
-		    datepicker_CurrentInput.value = "";
-		});
-		$('#form').bootstrapValidator();//表单提交时使用
-		//返回按钮
+		
+		$("#startDate1").on("show", function() {
+			 $(".datepicker.datepicker-dropdown.dropdown-menu").css("z-index", 1000);
+			})
+		
+		//查询按钮
 		$("#btnSearch").click(function(){
-			if(new Date($('#endDate1').val()) < new Date($('#startDate1').val())||new Date($('#endDate2').val()) < new Date($('#startDate2').val())){
-				rayDialog('开始时间不能大于结束时间！');
+			if(new Date($('#endDate1').val()) < new Date($('#startDate1').val())){
+				rayDialog('开始日期中开始时间不能大于结束时间！');
+				return;
+			}
+			if(new Date($('#endDate2').val()) < new Date($('#startDate2').val())){
+				rayDialog('结束日期中开始时间不能大于结束时间！');
 				return;
 			}
 			table.ajax.reload();
 		});
+		$("#noticeTitle").keyup(function(event){
+			if(event.keyCode == 13){
+				$("#btnSearch").click();
+			};
+		});
 	});
+	
+	//进入新增页面
+	function fncAdd(){
+		actSubmit($('#form'), ctx+"/notice/add");
+	}
 	
 	//进入详情页面
 	function fncDetail(noticeId){
-		actSubmit($('#form'), ctx+"/sys/notice/detail?noticeId="+noticeId);
+		actSubmit($('#form'), ctx+"/notice/update?noticeId="+noticeId);
 	}
 	
-	//进入更新页面
-	function fncUpdate(noticeId){
-		actSubmit($('#form'), ctx+"/sys/notice/update?noticeId="+noticeId);
+	//删除
+	function fncDelete(noticeId,publishSys){
+		rayDialogConfirm("是否要删除？",function(){
+			actSubmit($('#form'), ctx+"/notice/delete?noticeId="+noticeId+"&publishSys="+publishSys);
+		});
 	}
+	
+	$.extend( true, $.fn.dataTable.defaults, {
+		createdRow:function ( row, data, index ) {
+	        var noticeId = data["noticeId"];
+	        var publishSys = data["publishSys"];
+	        if(publishSys != '03'){
+	        	$('td', row).eq(6).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>"+
+	        								"<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDelete('"+noticeId+"','"+publishSys+"')\" title='去删除'><i class='fa fa-trash-o'></i></a>");
+	        }else{
+	        	$('td', row).eq(6).html("<a href='javascript:;' style='padding-left:7px;' onclick=\"fncDetail('"+noticeId+"')\" title='去查看'><i class='fa fa-file-text-o'></i></a>");
+	        }
+		}
+	});
 </script>		
 </head>
 <body>
@@ -78,76 +82,62 @@
 	<div class="box">
 		<%@include file="/core/include/boxHead.jsp" %>	
 			<div class="box-content">
-				<!-- <h4 class="page-header">Registration form</h4> -->
-				<form class="form-horizontal" id="form" method="post" action="/sys/notice/queryNoticeList"
-				 onkeypress="if(event.keyCode==13||event.which==13){return false;}">
+				<form class="form-horizontal" id="form" method="post" action="/notice/queryNoticeList">
 					<div class="form-group">
-					<label class="col-sm-1 control-label">公告标题</label>
-						<div class="col-sm-5">
+						<label class="col-sm-1 control-label">公告标题</label>
+						<div class="col-sm-5" style="width:39.7%">
 							<input type="text" id="noticeTitle" class="form-control" placeholder="公告标题" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="公告标题">
 						</div>
-						
-						<!-- 
-						<div class="col-sm-2">
-							<input type="text" id="startDate1" readonly="readonly" class="form-control" placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
-						</div>
-						<div class="col-sm-2">
-							<input type="text" id="endDate1" readonly="readonly" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
-						</div>
-						 -->
-						
 					</div>
 					<div class="form-group">
-					<label class="col-sm-1 control-label" style="padding-left:0px;padding-right:0px;">开始日期</label>
-						<div class="col-sm-5">
+						<label class="col-sm-1 control-label">开始日期</label>
+						<div class="col-sm-5 ">
 							<div class="form-inline">
 								<div class="input-group" >
-									<input type="text" id="startDate1" readonly="readonly" class="form-control" placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
+									<input type="text"  readonly id="startDate1"  class="form-control" placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
 									<span class="input-group-addon " ><i class="fa fa-calendar"></i></span>
 								</div>
-								<div class="input-group" style="margin-left:13px;margin-right:12px;">~</div>
-								<div class="input-group" >
-									<input type="text" id="endDate1" readonly="readonly" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
-									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<div class="input-group" >~</div>
+								<div class="input-group " >
+								<input type="text" readonly id="endDate1" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								</div>
 							</div>
 						</div>
-						
-						<label class="col-sm-1 control-label" style="padding-left:0px;padding-right:0px;">结束日期</label>
-						<div class="col-sm-5">
+					    <label class="col-sm-1 control-label">结束日期</label>
+					    <div class="col-sm-5">
 							<div class="form-inline">
 								<div class="input-group" >
-									<input type="text" id="startDate2" readonly="readonly" class="form-control"  placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
+									<input type="text"  readonly id="startDate2"  class="form-control" placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
 									<span class="input-group-addon " ><i class="fa fa-calendar"></i></span>
 								</div>
-								<div class="input-group" style="margin-left:13px;margin-right:12px;">~</div>
-								<div class="input-group" >
-									<input type="text" id="endDate2" readonly="readonly" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
-									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<div class="input-group" >~</div>
+								<div class="input-group " >
+								<input type="text" readonly id="endDate2" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								</div>
 							</div>
 						</div>
-						<!-- 
-						<div class="col-sm-2">
-							<input type="text" id="startDate2" readonly="readonly" class="form-control"  placeholder="开始日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="开始日期">
-						</div>
-						<div class="col-sm-2">
-							<input type="text" id="endDate2" readonly="readonly" class="form-control" placeholder="结束日期" data-query="yes" data-toggle="tooltip" data-placement="bottom" title="结束日期">
-						</div>
-						 -->
 					 </div>
-					 <div class="form-group">
-						 <div class="col-sm-12 text-center btn-raycom-search">
+					 <div class="form-group" >							
+						<div class="col-sm-12 text-center btn-raycom-search">
 							<button type="button" class="btn btn-default btn-xs btn-raycom" id="btnSearch">
-							 	查&nbsp;询 
-							</button>
+						 			查&nbsp;询 
+						  	</button>
 						</div>
-					 </div>
+					</div>
 				</form>
 			</div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="col-sm-3 text-left btn-raycom-nav">
+	  	<shiro:hasPermission name="notice:create">
+		 	<button type="button" class="btn btn-default btn-xs btn-raycom" onclick="fncAdd()">
+			新&nbsp;增
+		    </button>
+	  	</shiro:hasPermission>
 </div>
 <div class="row">
 	<div class="col-xs-12">
@@ -158,13 +148,14 @@
 					<thead>
 						<tr>
 							<th data-column="num">序号</th>
-							<th data-column="noticeId">公告ID</th>
+							<th data-column="noticeId">公告Id(隐藏)</th>
+							<th data-column="publishSys">发布系统(隐藏)</th>
 							<th data-column="noticeTitle">公告标题</th>
 							<th data-column="startDate">公告开始日期</th>
 							<th data-column="endDate">公告结束日期</th>
-							<th data-column="op" data-method="[
-										{targets:-1,title:'查看',fncName:'fncDetail',params:'noticeId'},
-										]">操作</th>
+							<th data-column="publishSysName">发布系统</th>
+							<th data-column="createDate">创建日期</th>
+							<th data-column="op">操作</th>
 						</tr>
 					</thead>
 					<tbody></tbody>

@@ -200,34 +200,12 @@
 						<ul class="nav navbar-nav pull-right panel-menu">
 							<!-- 时间图标 -->
 							<li class="hidden-xs">
-								<a href="http://docs.keshiku.cn"  target="_blank" >
-									<div class="user-mini pull-right">
-										<span style="color:#FF0000;font-size:14px">帮助</span>
-									</div>
-								</a>
-							</li>
-							<!-- <li class="hidden-xs">
-								<a href="${fns:getConfig('staticAttachentUrl')}printSetting.docx"  target="_blank" >
-									<div class="user-mini pull-right">
-										<span style="color:#FF0000;font-size:14px">打印机配置</span>
-									</div>
-								</a>
-							</li>
-							时间图标 -->
-							<li class="hidden-xs">
 								<i class="fa fa-clock-o"></i>
 								<span id="timeShow"></span>
 							</li>
-							<!-- 待办事项图标 -->
-							<li class="hidden-xs">
-								<a href="${ctx}/toDo" class="modal-link" target="mainFrame">
-									<i class="fa fa-tasks"></i>
-									<span id="todo" class="badge"></span>
-								</a>
-							</li>
 							<!-- 公告图标 -->
 							<li class="hidden-xs">
-								<a href="${ctx}/sys/notice" class="modal-link" target="mainFrame">
+								<a href="${ctx}/notice" class="modal-link" target="mainFrame">
 									<i class="fa fa-bell"></i>
 								</a>
 								<a href="${ctx}/notice/update?noticeId=" id="notice" style="display:none" target="mainFrame"><span>公告</span>
@@ -235,7 +213,7 @@
 							</li>
 							<!-- 修改密码 -->
 							<li>
-								<a href="${ctx}/vendorUser/updatePwd" class="modal-link" target="mainFrame">
+								<a href="${ctx}/user/updatePwd" class="modal-link" target="mainFrame">
 									<i class="fa fa-key"></i>
 									<!-- <span>修改密码</span> -->
 								</a>

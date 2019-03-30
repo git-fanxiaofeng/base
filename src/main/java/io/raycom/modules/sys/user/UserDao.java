@@ -38,4 +38,10 @@ public interface UserDao {
 	public void deleteUserRole (RData rdata);
 	
 	public void resetPwd(RData rdata);
+
+	public RData queryUserName(RData rdata);
+
+	public void savePwd(RData rdata);
+
+	public String queryUserPwd(RData rdata);
 }

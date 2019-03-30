@@ -213,4 +213,29 @@
      	WHERE	login_Name = #{loginName}
      </select>
      
+     <!-- 校验密码 -->
+    <select id="queryUserPwd" parameterType="rdata" resultType="string">
+     	SELECT	password	"password"
+     	FROM	com_user
+     	WHERE	user_id = #{currentUser}
+    </select>
+     
+    <!-- 更改密码 -->
+    <select id="savePwd" parameterType="rdata">
+     	UPDATE	com_user	
+     	SET		password = #{newPassword},
+     			update_by  	= #{currentUser},
+			    update_date = sysdate
+     	WHERE	user_id = #{currentUser}
+    </select>
+    
+    <!-- 查询用户登录名和姓名 -->
+    <select id="queryUserName" parameterType="rdata" resultType="rdata">
+    	SELECT	login_name 	"loginName",
+      			password	"password",
+      			user_name	"userName"
+      	FROM	com_user	
+      	WHERE	user_id = #{currentUser}
+    </select>
+     
 </mapper>
