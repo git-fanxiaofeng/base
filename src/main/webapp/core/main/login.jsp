@@ -12,8 +12,8 @@
 	<canvas width="1920" height="363"></canvas>   
 	<div id="login-popup-box">  
 		<div id="login-popup-left"> 
-			<div id="login-popup-left-inner">
-			<div class="login-vip-popup-content">
+			<div id="login-popup-left-inner"> 
+			<!-- <div class="login-vip-popup-content">
 				<p class="vip-title">中国医用器械耗材供应链的组织者和管理者</p>
 				<div class="vip-content">
 					<ul>
@@ -22,9 +22,9 @@
 						<li>提供专业的供应链组织和管理服务</li>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 			</div> 
-		</div> 
+		</div>  
 		<div id="login-popup-right" class="font-open-sans"> 
 		<div id="login-popup-right-inner"> 
 		<div class="user_bg"> 
@@ -119,11 +119,6 @@
 		if(self!=top){
 			//如果不是顶层页面，将其设为顶层页面
 		 	top.location=self.location;
-		}
-		
-
-		function register(){
-			layer.full(raylayer.dialog("${ctxFront}/sys/register"));
 		}
 		
 		function closeFrame(){
