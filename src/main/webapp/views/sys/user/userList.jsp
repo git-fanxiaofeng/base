@@ -65,16 +65,9 @@
 								data-bv-emailaddress-message="输入不是一个有效的邮箱格式"
 							  data-placement="bottom" title="电子邮箱">							
 						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-1 control-label">手机号码</label>
 						<div class="col-sm-2" >
 							<input type="text" id="mobileNo" class="form-control" placeholder="手机号码" data-query="yes"  data-toggle="tooltip" data-placement="bottom" title="手机号码">							
-						</div>
-						<label class="col-sm-1 control-label">登录状态</label>
-						<div class="col-sm-2" >
-						<rt:select2 id="loginFlag"  name="loginFlag" dataQuery="yes" headerKey="-1" headerValue="请选择"  comCode="loginStatus">
-							</rt:select2>
 						</div>
 					</div>
 					<div class="form-group">
@@ -113,7 +106,6 @@
 							<th data-column="email">电子邮件</th>
 							<th data-column="mobileNo">电话号码</th>
 							<th data-column="mobileNo">手机</th>
-							<th data-column="loginFlag">登录状态</th>
 							<th data-column="op" data-method="[
 										{targets:-1,title:'查看',fncName:'fncUpdate',params:'userId'},
 										{targets:-1,title:'删除',fncName:'fncDelete',params:'userId',icon:'del'}

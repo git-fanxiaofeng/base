@@ -110,17 +110,6 @@
 								data-bv-regexp-message="输入不是一个有效的手机格式" >
 						</div>
 					</div>
-					<div class="form-group" >
-						<label class="col-sm-2 control-label">用户编号</label>
-						<div class="col-sm-4">
-							<input  type="text"  class="form-control" id="userId"  name="userId" placeholder="用户编号" title="用户编号">
-						</div>
-						<label class="col-sm-1 control-label">状态</label>
-						<div class="col-sm-4" style="padding-top: 4px;">
-							<input name="loginFlag" type="radio" value="Y" checked="checked" />可以登陆
-							<input name="loginFlag" type="radio" value="N" />禁止登录
-						</div>
-					</div>
 					<div class="form-group " >
 						<label class="col-sm-2 control-label text-right">角色</label>
 						<div class="col-sm-4">
