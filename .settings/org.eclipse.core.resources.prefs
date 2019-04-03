@@ -1,5 +1,12 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
+encoding//src/main/resources/env/raycom_dev.properties=UTF-8
+encoding//src/main/resources/env/raycom_publish.properties=UTF-8
+encoding//src/main/resources/log4j.properties=UTF-8
+encoding//src/main/resources/raycom-scheduled.properties=UTF-8
+encoding//src/main/resources/raycom.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/classes/raycom.properties=UTF-8
 encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8
+encoding/LICENSE.txt=UTF-8

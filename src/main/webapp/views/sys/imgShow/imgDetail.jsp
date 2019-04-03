@@ -9,8 +9,8 @@
 </script>
 </head>
 <body>
-	<a href="${fns:getConfig("cdn.url")}/file/download?fileId=${img.attachId}" target="_blank" >
-		<img src="${fns:getConfig("cdn.url")}/file/showImg?fileId=${img.attachId}"  width="100%" height="100%"/>
+	<a href="${fns:getConfig('cdn.url')}/file/download?fileId=${img.attachId}" target="_blank" >
+		<img src="${fns:getConfig('cdn.url')}/file/showImg?fileId=${img.attachId}"  width="100%" height="100%"/>
 	</a>
 </body>
 </html>

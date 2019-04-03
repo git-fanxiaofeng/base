@@ -9,11 +9,11 @@
 		    classpath*:/spring-context-jms.xml, 
 			classpath*:/mybatis-config.xml,
 			classpath*:/spring-context-stand.xml
-		</param-value>
+	</param-value>
   </context-param>
   <listener>
     <listener-class>io.raycom.web.support.mvc.listener.WebContextListener</listener-class>
-  </listener>
+  </listener> 
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>

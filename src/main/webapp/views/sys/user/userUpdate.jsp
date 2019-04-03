@@ -35,11 +35,12 @@
 	}
 	
 	$(document).ready(function(){
+		$(".js-example-basic-single").select2();
+		
 		validator = $('#form').bootstrapValidator();
 		$("input[value='"+$("#a1").val()+"']").attr("checked",true); //使用登录
 		$("#userType").val($("#a2").val());//用户类型
 		
-		$('#officeName').orgRadioTree({id:'officeId',values:'${user.officeId}'});
 	}); 
 	
 	//重置密码
@@ -92,14 +93,9 @@
 						</div>
 					</div>
 					<div class="form-group has-feedback">
-						<label class="col-sm-2 control-label">密码</label>
-						<div class="col-sm-4">
-							<input value="${user.password}"  type="password" class="form-control" id="password" name="password" placeholder="字母开头6~20位" 
-								data-bv-notempty="true" 
-								data-bv-stringlength-min="6"
-								data-bv-stringlength-max="20"
-								data-bv-stringlength-message="该字段输入长度在6和20之间">
-							<span class="fa fa-check-square-o txt-danger form-control-feedback"></span>
+						<label class="col-sm-2 control-label">角色</label>
+						<div class="col-sm-2" style="width: 370px" >
+							<rt:select2  id="roles" name="roles"  htmlAppend="multiple='multiple'" items="${exceptRole}" itemLabel="roleName" itemValue="roleId"  value="${userRole}" dataQuery="yes" ></rt:select2>
 						</div>
 						<label class="col-sm-1 control-label">电话</label>
 						<div class="col-sm-4">
@@ -124,23 +120,6 @@
 								data-bv-regexp-message="输入不是一个有效的手机格式" >
 						</div>
 					</div>
-					<%-- <div class="form-group">
-						<label class="col-sm-2 control-label">角色</label>
-						<div class="col-sm-10" style="padding-top: 4px;">
-						 	<c:forEach items="${userRole}" var="role" >
-								<input type="radio" name="roles" checked="checked" value="${role.roleId}" />${role.roleName}
-							</c:forEach> 
-						 	<c:forEach items="${exceptRole}" var="role" >
-								<input type="radio" name="roles"  value="${role.roleId}" />${role.roleName}
-							</c:forEach> 
-						</div>
-					</div> --%>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">角色</label>
-						<div class="col-sm-2" >
-							<rt:select2 id="roles" name="roles"  htmlAppend="multiple='multiple'" items="${exceptRole }" itemLabel="roleName" itemValue="roleId"  value="${userRole}" dataQuery="yes" ></rt:select2>
-						</div>
-					</div>	
 					<div class="form-group">
 						<div class="col-sm-9">
 						</div>
@@ -149,9 +128,6 @@
 								返&nbsp;回
 							</button>
 						<shiro:hasPermission name="user:create">
-							<button type="button" class="btn btn-default btn-xs btn-raycom" onclick="resetPass();">
-								重置密码
-							</button>
 							<button type="button" class="btn btn-default btn-xs btn-raycom" onclick="fncUpdate();">
 								保&nbsp;存
 							</button>
